@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv*/
+build/
+dist/
+external/
+outputs/
+assets.local.json
+*.local.json
+.env
+.env.*
+token
+*.log
+# Only the two small exported self-trained weights belong in Git.
+*.safetensors
+*.bin

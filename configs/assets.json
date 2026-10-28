@@ -1,0 +1,38 @@
+{
+  "nora": {
+    "fast": {
+      "repo": "physical-intelligence/fast",
+      "revision": "ec4d7aa71691cac0b8bed6942be45684db2110f4"
+    },
+    "libero_object": {
+      "repo": "declare-lab/nora-long-finetuned-libero-object",
+      "revision": "7c205efb04d628b4e9bf507f794d8d2187b5b67a"
+    },
+    "libero_spatial": {
+      "repo": "declare-lab/nora-long-finetuned-libero-spatial",
+      "revision": "ef6b673da0d0278d29b67658bf5764ef7d470029"
+    },
+    "libero_goal": {
+      "repo": "declare-lab/nora-long-finetuned-libero-goal",
+      "revision": "19f25d50c850d91b8fc100c21bf044e35c53c476"
+    },
+    "libero_10": {
+      "repo": "declare-lab/nora-long-finetuned-libero-10",
+      "revision": "ddeffe36e738e407673371933b3fe7229e2287f1"
+    }
+  },
+  "pi0": {
+    "checkpoint": {
+      "repo": "lerobot/pi0fast-libero-v044",
+      "revision": "2bb8d5599b9cf8023ce9c110ba65af8e818fb4d3"
+    },
+    "tokenizer": {
+      "repo": "jadechoghari/fast-libero-tokenizer-mean-std",
+      "revision": "09072b523fb583dce9c16da1327d691cf0504b58"
+    },
+    "text_tokenizer": {
+      "repo": "google/paligemma-3b-pt-224",
+      "revision": "35e4f46485b4d07967e7e9935bc3786aad50687c"
+    }
+  }
+}

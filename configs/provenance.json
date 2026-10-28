@@ -1,0 +1,128 @@
+{
+  "nora": {
+    "source_relative": "logs/speculation/conservative_draft_accept_20261009/nora/gated_best.pt",
+    "source_sha256": "fa75918ee562f0da70bc14b1b50a5151065150c39d6aa131d124157679873e9a",
+    "export_sha256": "21a8abfb1010a298e480642e1aaa86598e0874bf52e22067bc7770678ac6643a",
+    "bytes": 31710242,
+    "selected_update": 0,
+    "training": {
+      "completed": true,
+      "updates": 4000,
+      "kind": "gated",
+      "train_rows": 480,
+      "dev_rows": 190,
+      "q0_excluded": true,
+      "config": {
+        "N": 5,
+        "memory_dim": 2048,
+        "width": 384,
+        "layers": 3,
+        "dropout": 0.1
+      },
+      "selected_update": 0,
+      "score": 0.03178517520427704,
+      "selection_grip_proxy": "normalized MAE safeguard; exact actual-command labels used training and final evaluation",
+      "sha256": "fa75918ee562f0da70bc14b1b50a5151065150c39d6aa131d124157679873e9a"
+    },
+    "calibration": {
+      "calibration_initial": 13,
+      "total_rows": 190,
+      "valid_score_rows": 190,
+      "thresholds": {
+        "relax20": -4.259315490722656,
+        "relax50": -5.599737167358398
+      },
+      "coverage": {
+        "relax20": {
+          "accepted": 38,
+          "denominator": 190,
+          "rate": 0.2
+        },
+        "relax50": {
+          "accepted": 95,
+          "denominator": 190,
+          "rate": 0.5
+        }
+      },
+      "posthoc_false_accept": {
+        "relax20": {
+          "wrong": 27,
+          "accepted": 38,
+          "note": "diagnostic only; not threshold constraint"
+        },
+        "relax50": {
+          "wrong": 80,
+          "accepted": 95,
+          "note": "diagnostic only; not threshold constraint"
+        }
+      },
+      "labels_used_for_threshold": false,
+      "ranking_direction": "higher",
+      "frozen_before_test": true
+    },
+    "optimizer_included": false
+  },
+  "pi0": {
+    "source_relative": "logs/speculation/conservative_draft_accept_20261009/pi0/gated_best.pt",
+    "source_sha256": "cfc17e0744b77b8f93c66f9c2b4087096265fe31886bfc5874884d7dbb864e7b",
+    "export_sha256": "11c52b960aa3fe1095f3693f019e7efad2fe8d8fdf33d76bdc2b4593e626579a",
+    "bytes": 31787216,
+    "selected_update": 400,
+    "training": {
+      "completed": true,
+      "updates": 4000,
+      "kind": "gated",
+      "train_rows": 478,
+      "dev_rows": 190,
+      "q0_excluded": true,
+      "config": {
+        "N": 10,
+        "memory_dim": 2048,
+        "width": 384,
+        "layers": 3,
+        "dropout": 0.1
+      },
+      "selected_update": 400,
+      "score": 0.19799348711967468,
+      "selection_grip_proxy": "normalized MAE safeguard; exact actual-command labels used training and final evaluation",
+      "sha256": "cfc17e0744b77b8f93c66f9c2b4087096265fe31886bfc5874884d7dbb864e7b"
+    },
+    "calibration": {
+      "calibration_initial": 13,
+      "total_rows": 190,
+      "valid_score_rows": 190,
+      "thresholds": {
+        "relax20": -3.262343406677246,
+        "relax50": -3.711652994155884
+      },
+      "coverage": {
+        "relax20": {
+          "accepted": 38,
+          "denominator": 190,
+          "rate": 0.2
+        },
+        "relax50": {
+          "accepted": 95,
+          "denominator": 190,
+          "rate": 0.5
+        }
+      },
+      "posthoc_false_accept": {
+        "relax20": {
+          "wrong": 38,
+          "accepted": 38,
+          "note": "diagnostic only; not threshold constraint"
+        },
+        "relax50": {
+          "wrong": 95,
+          "accepted": 95,
+          "note": "diagnostic only; not threshold constraint"
+        }
+      },
+      "labels_used_for_threshold": false,
+      "ranking_direction": "higher",
+      "frozen_before_test": true
+    },
+    "optimizer_included": false
+  }
+}

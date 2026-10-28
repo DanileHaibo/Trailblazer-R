@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trailblazer-r"
+version = "0.1.0"
+description = "Exploratory single-prefill approximate FAST action reuse for NORA and PI0-FAST"
+requires-python = ">=3.10"
+# Install one of the explicit isolated environments first; never co-install them.
+dependencies = []
+
+[project.scripts]
+trailblazer-prepare = "trailblazer.prepare:main"
+trailblazer-evaluate = "trailblazer.evaluate:main"
+
+[tool.setuptools]
+packages = ["trailblazer"]
