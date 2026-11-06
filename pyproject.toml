@@ -4,15 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trailblazer-r"
-version = "0.1.0"
-description = "Exploratory single-prefill approximate FAST action reuse for NORA and PI0-FAST"
+version = "0.2.0"
+description = "Three-branch speculative action decoding for WorldVLA and RynnVLA-002"
 requires-python = ">=3.10"
-# Install one of the explicit isolated environments first; never co-install them.
+# Install the model-specific environment separately.
 dependencies = []
 
-[project.scripts]
-trailblazer-prepare = "trailblazer.prepare:main"
-trailblazer-evaluate = "trailblazer.evaluate:main"
-
-[tool.setuptools]
-packages = ["trailblazer"]
+[tool.setuptools.packages.find]
+include = ["worldvla*", "rynnvla*"]

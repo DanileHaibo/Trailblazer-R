@@ -1,0 +1,35 @@
+# Python 3.10; isolated environment recommended. CUDA build used: torch 2.4.0+cu121.
+# Install CUDA torch/torchvision from https://download.pytorch.org/whl/cu121 if needed.
+# External target repo (not a pip package):
+# git clone https://github.com/alibaba-damo-academy/RynnVLA-002.git
+# git -C RynnVLA-002 checkout ebdc36dc5cfdc3288e19a7b117b2ff07b135c8be
+# Pass its root as --upstream-repo; do not pip-install its unrelated default branch.
+torch==2.4.0
+torchvision==0.19.0
+transformers==4.48.0
+accelerate==1.5.2
+numpy==1.26.4
+pillow==12.2.0
+safetensors==0.6.2
+sentencepiece==0.2.2
+huggingface-hub==0.35.3
+einops==0.8.2
+omegaconf==2.4.0
+timm==1.0.22
+PyYAML==6.0.3
+imageio==2.37.3
+imageio-ffmpeg==0.6.0
+opencv-python==4.10.0.84
+h5py==3.16.0
+mujoco==3.2.7
+robosuite==1.4.0
+gym==0.25.2
+bddl==1.0.1
+numba==0.59.1
+PyOpenGL==3.1.10
+easyDict==1.13
+termcolor==3.2.0
+tqdm==4.70.0
+wandb==0.28.0
+# LIBERO is installed editable separately following README; do not install twice.
+# Pinned commit: 8f1084e3132a39270c3a13ebe37270a43ece2a01

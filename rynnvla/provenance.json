@@ -1,0 +1,31 @@
+{
+  "base_model": {
+    "repository": "Alibaba-DAMO-Academy/RynnVLA-002",
+    "url": "https://huggingface.co/Alibaba-DAMO-Academy/RynnVLA-002",
+    "revision": "be44787bfdf010799129dbd3752637f5c52ca957",
+    "subdirectories": ["VLA_model_256/libero_spatial", "VLA_model_256/libero_object", "VLA_model_256/libero_goal", "VLA_model_256/libero_10"],
+    "included": false
+  },
+  "processor_resources": {
+    "repository": "Alibaba-DAMO-Academy/WorldVLA",
+    "url": "https://huggingface.co/Alibaba-DAMO-Academy/WorldVLA",
+    "revision": "5952d61278d52608b2f141ef5b155d42e237165b",
+    "text_tokenizer_subdirectory": "base_model",
+    "image_tokenizer_subdirectory": "chameleon/tokenizer",
+    "required_image_files": ["text_tokenizer.json", "vqgan.yaml", "vqgan.ckpt"],
+    "note": "Official Rynn processor resources only; never substitute WorldVLA policy weights",
+    "included": false
+  },
+  "external_code": [
+    {"repository": "https://github.com/alibaba-damo-academy/RynnVLA-002", "commit": "e548ccc2977ba4fc06013de18192fa6245e454a4", "argument": "--official-repo", "required_components": ["rynnvla-002/model", "rynnvla-002/data", "rynnvla-002/libero_util", "xllmx"]},
+    {"repository": "https://github.com/Lifelong-Robot-Learning/LIBERO", "commit": "8f1084e3132a39270c3a13ebe37270a43ece2a01", "argument": "--libero-repo", "note": "Configure LIBERO assets/bddl/init states via LIBERO_CONFIG_PATH on the destination machine"}
+  ],
+  "local_source_files": ["scripts/v_original/rynn_transformer_runtime_v1.py", "scripts/v_original/rynn_context_v4.py", "scripts/v_original/runtime.py", "scripts/rynn_spec_runtime.py", "scripts/rynn_native.py", "scripts/v_original/rynn_transformer_distill_v1.py", "scripts/v_original/rynn_absolute_gate_v1.py", "scripts/v_original/rynn_context_fair_v5.py", "scripts/v_original/rynn_context_final_v7.py"],
+  "dependency_boundary": "All project-local inference dependencies are included in rynnvla; official model/processor and LIBERO remain explicit pinned external repositories, not silently imported from the source project",
+  "environment": {"python": "3.10", "torch": "2.4.0+cu121", "transformers": "4.48.0", "robosuite": "1.4.0", "mujoco": "3.2.7", "requirements": "environments/rynnvla.txt"},
+  "preserved_algorithm": "3 independent context Transformer branches, one fresh full chunk per branch/query, no previous action tail, one official causal-mask block verification, atomic 7D prefix acceptance, crop rejected KV suffix and recover with original greedy AR",
+  "history_update": "every environment step, including steps executing already queued actions",
+  "evaluation": {"source": "context_final_v7_20261106_1121", "default_pairs": 200, "default_episodes": 400, "tasks": "0:10", "initials": "10:15", "not_standard_500_per_suite": true, "warmup_excluded": true, "automatic_retries": false, "hardware_fault": "stop immediately without committing incomplete pair"},
+  "portability_changes": ["explicit backend/model/tokenizer/checkpoint/output paths", "package-relative project imports", "lazy CLI dependencies", "native-only mode skips draft checkpoint loading", "no GPU visibility override", "real Python hash seed initialization via re-exec", "new output directories only", "live controller evidence summarized with original digest"],
+  "validation_scope": "CPU syntax/import/CLI and checkpoint compatibility only; no GPU allocated and no closed-loop performance claim"
+}

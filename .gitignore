@@ -6,12 +6,17 @@ build/
 dist/
 external/
 outputs/
-assets.local.json
+assets/
 *.local.json
 .env
 .env.*
 token
 *.log
-# Only the two small exported self-trained weights belong in Git.
 *.safetensors
 *.bin
+# Only the exported, self-trained draft files are tracked.
+*.pt
+!weights/**/*.pt
+*.hdf5
+*.h5
+*.mp4

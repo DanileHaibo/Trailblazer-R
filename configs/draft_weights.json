@@ -1,0 +1,86 @@
+{
+  "base_weights_included": false,
+  "total_bytes": 100404842,
+  "files": [
+    {
+      "path": "weights/worldvla/libero_10.pt",
+      "bytes": 13245692,
+      "sha256": "cf978fde8697ba0ccacd9881f95ae74c3ce4ab34e7811635d545b86a4ac338c6"
+    },
+    {
+      "path": "weights/worldvla/libero_goal.pt",
+      "bytes": 13238012,
+      "sha256": "5f1196bf2b32881ff73832689fcea89d5c14a57ed4eca317a60023aa38b6f16f"
+    },
+    {
+      "path": "weights/worldvla/libero_object.pt",
+      "bytes": 13238012,
+      "sha256": "4c803f5f133746d603a4149772355018f2a9d101a3fd44363f66c1d0f69e664e"
+    },
+    {
+      "path": "weights/worldvla/libero_spatial.pt",
+      "bytes": 13238012,
+      "sha256": "3c6946ac54f906cf5cee45b23d96489247a6d5f8dbf3a6d7e7fae017a56ee508"
+    },
+    {
+      "path": "weights/rynnvla/libero_10_grip_best.pt",
+      "bytes": 3954156,
+      "sha256": "08c627b7598d68e3bd07c101a8058fa70e91567c76a115d553a8beb622ead219"
+    },
+    {
+      "path": "weights/rynnvla/libero_10_rot_best.pt",
+      "bytes": 3955122,
+      "sha256": "ddfd34e666fa376ab40e5157b738c1ca843c23d3df3f0e19867c6914b38baf45"
+    },
+    {
+      "path": "weights/rynnvla/libero_10_xyz_best.pt",
+      "bytes": 3955122,
+      "sha256": "66eafac3204eb1972a266651ce35891f5e1e4ee240f244f068b33ce001b363c3"
+    },
+    {
+      "path": "weights/rynnvla/libero_goal_grip_best.pt",
+      "bytes": 3951776,
+      "sha256": "441141a1a11a8bb6ed61c008b84f0c465049beedcc1171241595054411592a64"
+    },
+    {
+      "path": "weights/rynnvla/libero_goal_rot_best.pt",
+      "bytes": 3952742,
+      "sha256": "681f4f6ef0fd8868063dace1fa636984ee6f260304c9bc267c915396d206ab13"
+    },
+    {
+      "path": "weights/rynnvla/libero_goal_xyz_best.pt",
+      "bytes": 3952742,
+      "sha256": "6268566699c7ae66458757fda167cdfe7b97fbab22e618745cd21ebc550f4744"
+    },
+    {
+      "path": "weights/rynnvla/libero_object_grip_best.pt",
+      "bytes": 3951956,
+      "sha256": "757f756023592ce368beaadc4d6b3183601eb1974ae790efc59c26a07a236670"
+    },
+    {
+      "path": "weights/rynnvla/libero_object_rot_best.pt",
+      "bytes": 3952922,
+      "sha256": "f5b1948bb2e59cb464ad3ef8de652cf5ff5725dbedb9b42313dc4748d2566f25"
+    },
+    {
+      "path": "weights/rynnvla/libero_object_xyz_best.pt",
+      "bytes": 3952922,
+      "sha256": "ada9c30600404963ba80fb8f4bf19d8e00e0d60e84f883dd9cff4045f8161e01"
+    },
+    {
+      "path": "weights/rynnvla/libero_spatial_grip_best.pt",
+      "bytes": 3954574,
+      "sha256": "e4d7ec6c6b740b8642429c73739419ad9d7ec96b50dd3d092a73fce12425c1a0"
+    },
+    {
+      "path": "weights/rynnvla/libero_spatial_rot_best.pt",
+      "bytes": 3955540,
+      "sha256": "5ea487a76c467a678154b741cce55c5821023858c3a8471e497b75240a051ee2"
+    },
+    {
+      "path": "weights/rynnvla/libero_spatial_xyz_best.pt",
+      "bytes": 3955540,
+      "sha256": "644fe9e2d83ecc67ee97fd5d14b346561e90c6bd4f88c7706ea61ecf678bf327"
+    }
+  ]
+}

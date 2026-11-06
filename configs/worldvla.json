@@ -1,0 +1,53 @@
+{
+  "variant": "canonical_rich_v2_three_independent_transformer_drafts",
+  "entrypoint": "python -m worldvla",
+  "suites": ["libero_spatial", "libero_object", "libero_goal", "libero_10"],
+  "target_dtype": "float32",
+  "target_dtype_note": "Original runtime observed BF16 native/block disagreement. Both native/spec remain FP32, no BF16 speed claim.",
+  "target_hf": {
+    "repo_id": "Alibaba-DAMO-Academy/WorldVLA",
+    "url": "https://huggingface.co/Alibaba-DAMO-Academy/WorldVLA",
+    "required_subtrees": ["base_model", "chameleon/tokenizer", "model_256/<suite>"],
+    "download_example": "huggingface-cli download Alibaba-DAMO-Academy/WorldVLA --include 'base_model/*' 'chameleon/tokenizer/*' 'model_256/*' --local-dir ./assets/WorldVLA",
+    "revision": "5952d61278d52608b2f141ef5b155d42e237165b",
+    "revision_note": "Recorded in the original resource_manifest.json. tools/download_assets.py pins this revision. Base weights are not bundled. Starting-point and model_512 are not needed for inference."
+  },
+  "external_repositories": {
+    "WorldVLA": {
+      "url": "https://github.com/alibaba-damo-academy/RynnVLA-002.git",
+      "branch": "worldvla",
+      "commit": "ebdc36dc5cfdc3288e19a7b117b2ff07b135c8be",
+      "source_tree_clean": true,
+      "note": "Pass checkout root via --upstream-repo; it provides model, data, xllmx and libero_util. Do not use default Rynn branch."
+    },
+    "LIBERO": {
+      "url": "https://github.com/Lifelong-Robot-Learning/LIBERO.git",
+      "commit": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+      "setup_note": "Install pinned source and configure its user-local LIBERO config.yaml to checkout assets, bddl_files, init_files and benchmark_root. Missing config may cause an interactive prompt. No dataset download is needed for evaluation."
+    }
+  },
+  "prompt": "Original What action should the robot take to <instruction>? with only current or previous/current agentview images; no wrist or action history",
+  "rich_condition": "same target prefill: last hidden, language mean, four pools per previous/current image (duplicate current at first query), explicit 8D proprio",
+  "draft": "three independent 2-layer TransformerDecoder branches (xyz, rotation, grip), 128 hidden, 4 heads, one call per branch per query",
+  "verification": "one target causal block call with official row-specific mask and shifted logits; references are candidate-prefix-conditioned, NOT independent native AR",
+  "recovery": "first rejected whole step: crop KV and mutable init_input_ids to accepted prefix minus one token, original AR suffix through EOS; no refine, no fixedpoint, no tail reuse",
+  "gate": {
+    "xyz_unit": "m_goal_delta",
+    "rotation_unit": "rad_axisangle_delta_component",
+    "gripper_unit": "binary_sign",
+    "xyz_threshold": 0.01,
+    "rotation_threshold": 0.05,
+    "controller_scale_xyz": 0.05,
+    "controller_scale_rotation": 0.5,
+    "control_delta": true
+  },
+  "scope": "Thresholds describe controller goal increments, not measured achieved pose or geodesic rotation. Legacy canonical run init45 is exposed development, not finaltest. No score or speedup guarantee.",
+  "checkpoints": {
+    "libero_spatial": {"path": "weights/worldvla/libero_spatial.pt", "bytes": 13238012, "sha256": "3c6946ac54f906cf5cee45b23d96489247a6d5f8dbf3a6d7e7fae017a56ee508"},
+    "libero_object": {"path": "weights/worldvla/libero_object.pt", "bytes": 13238012, "sha256": "4c803f5f133746d603a4149772355018f2a9d101a3fd44363f66c1d0f69e664e"},
+    "libero_goal": {"path": "weights/worldvla/libero_goal.pt", "bytes": 13238012, "sha256": "5f1196bf2b32881ff73832689fcea89d5c14a57ed4eca317a60023aa38b6f16f"},
+    "libero_10": {"path": "weights/worldvla/libero_10.pt", "bytes": 13245692, "sha256": "cf978fde8697ba0ccacd9881f95ae74c3ce4ab34e7811635d545b86a4ac338c6"}
+  },
+  "sources": ["worldvla_rich_pipeline_v2.py", "worldvla_rich_pipeline.py", "worldvla_rich_components.py", "worldvla_runtime.py", "worldvla_original_run.py", "worldvla_transformer_absolute.py", "worldvla_contract.py"],
+  "release_changes": "Extracted inference-only local dependency closure, parameterized paths/device/CLI, removed GPU ownership locks and machine paths; preserved original branch architecture, target implementation, mask/shift/crop/gate algorithms. Training supervisor and legacy unrelated pipelines intentionally not imported."
+}

@@ -1,0 +1,19 @@
+{
+  "source_run": "context_relax_v6_20261106_0145/gate_10mm",
+  "source_checkpoints": "context_v4_tight_dev_20261105_1717/checkpoints",
+  "base_model_included": false,
+  "checkpoint_sha256": {
+    "libero_10_grip_best.pt": "08c627b7598d68e3bd07c101a8058fa70e91567c76a115d553a8beb622ead219",
+    "libero_10_rot_best.pt": "ddfd34e666fa376ab40e5157b738c1ca843c23d3df3f0e19867c6914b38baf45",
+    "libero_10_xyz_best.pt": "66eafac3204eb1972a266651ce35891f5e1e4ee240f244f068b33ce001b363c3",
+    "libero_goal_grip_best.pt": "441141a1a11a8bb6ed61c008b84f0c465049beedcc1171241595054411592a64",
+    "libero_goal_rot_best.pt": "681f4f6ef0fd8868063dace1fa636984ee6f260304c9bc267c915396d206ab13",
+    "libero_goal_xyz_best.pt": "6268566699c7ae66458757fda167cdfe7b97fbab22e618745cd21ebc550f4744",
+    "libero_object_grip_best.pt": "757f756023592ce368beaadc4d6b3183601eb1974ae790efc59c26a07a236670",
+    "libero_object_rot_best.pt": "f5b1948bb2e59cb464ad3ef8de652cf5ff5725dbedb9b42313dc4748d2566f25",
+    "libero_object_xyz_best.pt": "ada9c30600404963ba80fb8f4bf19d8e00e0d60e84f883dd9cff4045f8161e01",
+    "libero_spatial_grip_best.pt": "e4d7ec6c6b740b8642429c73739419ad9d7ec96b50dd3d092a73fce12425c1a0",
+    "libero_spatial_rot_best.pt": "5ea487a76c467a678154b741cce55c5821023858c3a8471e497b75240a051ee2",
+    "libero_spatial_xyz_best.pt": "644fe9e2d83ecc67ee97fd5d14b346561e90c6bd4f88c7706ea61ecf678bf327"
+  }
+}

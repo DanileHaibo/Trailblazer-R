@@ -1,0 +1,11 @@
+{
+  "variant": "canonical_rich_v2",
+  "source_run": "worldvla_rich_demo_canonical_v2_20261105",
+  "files": ["libero_spatial.pt", "libero_object.pt", "libero_goal.pt", "libero_10.pt"],
+  "source_filename": "<suite>/best.pt",
+  "training": "Frozen FP32 native-AR hard-token KD; train standard demos 0..39; model-selection demos 45..49; excluded demos 40..44",
+  "canonical_condition": "actual previous/current agentview token pools, language and explicit 8D proprio; no wrist; no previous action tail",
+  "legacy_checkpoint_config_warning": "Embedded config memory label mentions wrist because fit() reused an old descriptive string; canonical_v2 collection actually uses only agentview, never dual-camera cache",
+  "selection_scope": "Online reset init45 is exposed development only, not independent holdout. No performance or success guarantee.",
+  "base_weights_included": false
+}

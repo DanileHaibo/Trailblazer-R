@@ -1,0 +1,19 @@
+{
+  "source": "context_v4_tight_dev_20261105_1717/live_controller_evidence.json",
+  "source_sha256": "ef16ba104e073de926fea9e5eef7f027e3e22077e5020c4377ccbaea85b2798f",
+  "kind": "portable summary of live CPU controller probes, not a new measurement",
+  "suites": ["libero_spatial", "libero_object", "libero_goal", "libero_10"],
+  "controller_class": "robosuite.controllers.osc.OperationalSpaceController",
+  "gripper_class": "robosuite.models.grippers.panda_gripper.PandaGripper",
+  "input_min": [-1, -1, -1, -1, -1, -1],
+  "input_max": [1, 1, 1, 1, 1, 1],
+  "output_min": [-0.05, -0.05, -0.05, -0.5, -0.5, -0.5],
+  "output_max": [0.05, 0.05, 0.05, 0.5, 0.5, 0.5],
+  "physical_per_command": [0.05, 0.05, 0.05, 0.5, 0.5, 0.5],
+  "control_delta": true,
+  "control_freq": 20,
+  "xyz_metric": "goal displacement components in meters, not achieved motion or velocity",
+  "rot_metric": "axis-angle delta components in radians, not pairwise geodesic orientation error",
+  "gripper_semantics": "-1 open, +1 close; sign-based actuator increment, not force",
+  "confirmed": true
+}

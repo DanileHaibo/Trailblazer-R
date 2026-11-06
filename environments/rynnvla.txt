@@ -1,0 +1,39 @@
+# Python 3.10; observed inference environment, not upstream training requirements.
+# Install CUDA torch wheels with: --extra-index-url https://download.pytorch.org/whl/cu121
+# External source dependencies (see rynnvla/provenance.json):
+# RynnVLA-002 e548ccc2977ba4fc06013de18192fa6245e454a4 (--official-repo)
+# LIBERO 8f1084e3132a39270c3a13ebe37270a43ece2a01 (--libero-repo or editable install)
+torch==2.4.0+cu121
+torchvision==0.19.0+cu121
+transformers==4.48.0
+tokenizers==0.21.4
+accelerate==1.5.2
+numpy==1.26.4
+pillow==12.2.0
+safetensors==0.6.2
+huggingface-hub==0.35.3
+sentencepiece==0.2.2
+protobuf==4.25.9
+einops==0.8.2
+omegaconf==2.4.0
+PyYAML==6.0.3
+timm==1.0.22
+addict==2.4.0
+scipy==1.15.3
+opencv-python==4.10.0.84
+imageio==2.37.3
+imageio-ffmpeg==0.6.0
+robosuite==1.4.0
+mujoco==3.2.7
+bddl==1.0.1
+gym==0.25.2
+numba==0.59.1
+h5py==3.16.0
+PyOpenGL==3.1.10
+glfw==2.10.2
+easydict==1.13
+cloudpickle==3.1.2
+tqdm==4.70.0
+termcolor==3.2.0
+matplotlib==3.10.9
+wandb==0.28.0

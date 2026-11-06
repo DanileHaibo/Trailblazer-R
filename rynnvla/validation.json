@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-06",
+  "cpu_only": true,
+  "cuda_initialized": false,
+  "syntax_all_package_python": "passed",
+  "package_imports": "passed: backend, gate, draft, runtime, evaluate",
+  "official_backend_imports": "passed: official model, action/state processor, xllmx processor, image tokenizer module",
+  "cli_help": "passed",
+  "cli_plan_without_torch": "passed using system Python",
+  "default_plan": {"pairs": 200, "episodes": 400},
+  "checkpoint_sha256": "12 of 12 match original gate_10mm manifest",
+  "checkpoint_strict_state_dict_load": "12 of 12 passed",
+  "checkpoint_cpu_forward": "12 of 12 passed, context feature dimension 16392, horizon 5 or 10, branch dimensions 3/3/1, 256 classes",
+  "checkpoint_size_bytes": {"minimum": 3951776, "maximum": 3955540, "count": 12},
+  "gate_checks": "identical action accepted; grip sign mismatch rejected; large translation mismatch rejected",
+  "machine_absolute_paths": "none in package/config/environment files",
+  "not_run": ["target model instantiation", "GPU inference", "LIBERO renderer/rollouts", "native token parity", "performance evaluation"],
+  "limitations": ["Destination must obtain explicit pinned official RynnVLA and LIBERO dependencies plus base/tokenizer assets", "Existing source 200-pair run was not modified or used as an online oracle", "Runtime algorithm is parameterized from source, but GPU parity has not been re-verified in release layout", "Warmup exceptions fail the episode rather than silently continuing"]
+}
