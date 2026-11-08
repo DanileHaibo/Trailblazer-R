@@ -1,0 +1,33 @@
+{
+  "schema_version": 2,
+  "audit_date": "2026-11-08",
+  "protocol": {
+    "pairs_per_suite": 50,
+    "tasks": "0-9",
+    "note": "200 paired trials / 400 episodes total; NOT paper Table1 50-inits/task (500 eps/suite)",
+    "worldvla": "FP32 target; three independent Transformer drafts; one causal block; fixed-horizon noEOS grammar on speculative arm; AbsoluteGate 0.01m / 0.05rad / grip sign",
+    "rynnvla": "Official discrete BF16 generate_dis_ma path; max_new_tokens=300; three independent drafts; one official-mask block; BF16 verifier boundary-token reuse on recover; AbsoluteGate 0.01m / 0.05rad / grip sign"
+  },
+  "suite_order": ["Spatial", "Object", "Goal", "Long"],
+  "worldvla": {
+    "experiment": "three_draft_full_v14",
+    "initials": "0-4",
+    "native_success_pct": {"Spatial": 86.0, "Object": 80.0, "Goal": 68.0, "Long": 44.0, "Average": 69.5},
+    "spec_success_pct": {"Spatial": 90.0, "Object": 84.0, "Goal": 74.0, "Long": 48.0, "Average": 74.0},
+    "episode_wall_time_reduction": {"Spatial": 0.2997, "Object": 0.3928, "Goal": 0.2449, "Long": 0.2881, "macro": 0.3064},
+    "policy_time_reduction": {"Spatial": 0.3238, "Object": 0.4128, "Goal": 0.2551, "Long": 0.3021, "macro": 0.3234},
+    "acceptance": {"Spatial": 0.4374, "Object": 0.4909, "Goal": 0.2069, "Long": 0.3329}
+  },
+  "rynnvla": {
+    "experiment": "official_sp_full_v11",
+    "initials": "10-14",
+    "native_success_pct": {"Spatial": 90.0, "Object": 94.0, "Goal": 100.0, "Long": 94.0, "Average": 94.5},
+    "spec_success_pct": {"Spatial": 88.0, "Object": 72.0, "Goal": 98.0, "Long": 72.0, "Average": 82.5},
+    "episode_wall_time_reduction": {"Spatial": 0.3389, "Object": 0.6174, "Goal": 0.5038, "Long": 0.3298, "macro": 0.4475},
+    "policy_time_reduction": {"Spatial": 0.3643, "Object": 0.5174, "Goal": 0.5325, "Long": 0.3526, "macro": 0.4417},
+    "limitations": [
+      "Object/Long success drops under 1cm/0.05rad gate; tight 5mm/0.025rad retest is development-only",
+      "SP is not fully official; native uses official discrete flow"
+    ]
+  }
+}

@@ -14,8 +14,9 @@
 阈值对应 LIBERO `OSC_POSE` 控制目标增量（xyz `0.05 m/command`、旋转 `0.5 rad/command`），**不是测得的机器人实际位姿误差上界**。这是近似接受，不承诺与 native token 或成功率严格等价。
 
 - **WorldVLA**：Spatial / Object / Goal 预测最多 5 步，Long 最多 10 步，执行返回的整个有效 chunk；原生可提前 EOS。保留官方 previous/current **agentview-only** target prompt，不注入 wrist。FP32 target；rich draft 使用真实图像/语言 token pool 与 proprioception。
-- **RynnVLA-002**：Spatial / Long 预测并执行 10 步，Object / Goal 5 步。BF16 target，`highest`、TF32 off；历史图像每个环境步更新，而非每个 chunk 更新。
+- **RynnVLA-002**：Spatial / Long 预测并执行 10 步，Object / Goal 5 步。BF16 target，`highest`、TF32 off；`max_new_tokens=300`；历史图像每个环境步更新，而非每个 chunk 更新。拒绝后 **复用 verifier 边界 token** 并裁剪 KV 到已接受前缀，避免 BF16 下重新 forward 末 token 造成的近平局漂移。
 - 支持 `libero_spatial`、`libero_object`、`libero_goal`、`libero_10`（Long）。
+- 默认 gate：`configs/rynnvla.json`（1 cm / 0.05 rad）。更紧开发门槛：`--config configs/rynnvla_tight_5mm.json`（5 mm / 0.025 rad）。
 
 仓库提供已训练 draft 与参数化**评测启动流程**。不包含基座、demonstrations、teacher 缓存，也不声称已提供从零重训全链路。原实验开发结果不等于新发布入口已完成 GPU 端到端复现；请先运行小样本。≥30% 加速与保分是实验目标，**不是所有 suite 已验证通过的保证**。
 
@@ -129,7 +130,20 @@ python -m rynnvla.evaluate \
 
 输出包括配置/权重哈希 manifest、逐 query 耗时/接受记录、episode 成功结果。延迟比较应报告完整 policy query，包括图像处理、prefill、draft、验证和 AR 回补；不能把 token 吞吐提升直接称为端到端加速。正式比较应先做 GPU warmup，并保持两臂精度、GPU负载与计时边界一致。
 
-## 5. 发布检查
+## 5. 主实验结果（200 对 / 非论文 500/suite）
+
+已冻结数字见 [`results/main_table_200pair.json`](results/main_table_200pair.json) 与可粘贴 LaTeX [`results/main_table.tex`](results/main_table.tex)。
+
+| Model | Method | Spatial | Object | Goal | Long | Avg | Wall cut (macro) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| WorldVLA | Native | 86.0 | 80.0 | 68.0 | 44.0 | 69.5 | — |
+| WorldVLA | Spec | 90.0 | 84.0 | 74.0 | 48.0 | 74.0 | 30.6% |
+| RynnVLA-002 | Native | 90.0 | 94.0 | 100.0 | 94.0 | 94.5 | — |
+| RynnVLA-002 | Spec | 88.0 | 72.0 | 98.0 | 72.0 | 82.5 | 44.7% |
+
+Rynn Object/Long 在 1 cm gate 下有明显掉分；收紧门槛的小样本重测不并入上表。
+
+## 6. 发布检查
 
 ```bash
 python tools/check_release.py

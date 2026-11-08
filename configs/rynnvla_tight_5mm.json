@@ -1,0 +1,28 @@
+{
+  "seed": 20261104,
+  "env_seed": 0,
+  "suites": ["libero_spatial", "libero_object", "libero_goal", "libero_10"],
+  "tasks": "0:10",
+  "initials": "10:15",
+  "checkpoint": "weights/rynnvla",
+  "history": "previous environment-step observation, updated every step including queued chunk actions",
+  "precision": {"target": "bfloat16", "draft": "float32", "float32_matmul": "highest", "tf32": false, "deterministic_warn_only": true},
+  "gate": {
+    "xyz": {
+      "unit": "m", "absolute_tolerance": [0.005, 0.005, 0.005],
+      "verified_controller_mapping": {
+        "confirmed": true, "source_evidence": "rynnvla/controller_evidence.json",
+        "physical_per_command": [0.05, 0.05, 0.05]
+      }
+    },
+    "rot": {
+      "unit": "rad", "absolute_tolerance": [0.025, 0.025, 0.025],
+      "verified_controller_mapping": {
+        "confirmed": true, "source_evidence": "rynnvla/controller_evidence.json",
+        "physical_per_command": [0.5, 0.5, 0.5], "metric": "axis_angle_component_delta"
+      }
+    },
+    "grip": {"unit": "command_units", "mode": "switch_sign_only", "require_same_open_close": true},
+    "confirmation": "Authorized development tight gate xyz<=0.005m rot<=0.025rad; gripper sign unchanged"
+  }
+}

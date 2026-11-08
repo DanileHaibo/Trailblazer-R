@@ -21,8 +21,10 @@ class Runtime:
             mask_image_logits=False, max_position_embeddings=8192).eval()
         self.model.requires_grad_(False)
         self.horizon = int(self.model.config.time_horizon)
-        self.config = GenerationConfig(max_new_tokens=self.horizon*12, max_length=8192,
+        # Match official discrete generate_dis_ma budget (300), not just horizon*12.
+        self.config = GenerationConfig(max_new_tokens=300, max_length=8192,
             do_sample=False, temperature=1, top_k=None, eos_token_id=[8710])
+        self.max_new_tokens = 300
         self.drafts = []
         if mode == 'spec':
             if gate_config is None or checkpoint_dir is None:
@@ -75,38 +77,37 @@ class Runtime:
         return logits.argmax(-1)[0].tolist(), out.past_key_values
 
     @torch.inference_mode()
-    def recover_original(self, prompt, accepted, cache, first_logits):
+    def recover_original(self, prompt, accepted, cache, boundary_token):
+        # Keep verifier KV through the accepted prefix; reuse verifier boundary argmax.
+        # Avoids re-forwarding the last accepted token under a different BF16 shape.
         n = prompt.shape[1]
-        cache.crop(n+len(accepted))
-        if accepted:
-            cache.crop(n+len(accepted)-1)
-            full = torch.cat([prompt, torch.tensor([accepted], device=self.device)], 1)
-            self.model.init_input_ids = full[:, :-1].clone()
-            out = self.model(input_ids=full[:, -1:], past_key_values=cache, use_cache=True, return_dict=True)
-            cache, logits = out.past_key_values, out.logits[:, -1]
-        else:
-            self.model.init_input_ids = prompt.clone()
-            logits = first_logits
-        generated = []
-        for _ in range(self.horizon*12-len(accepted)):
-            t = int(logits[0].argmax())
+        if isinstance(cache, tuple):
+            cache = DynamicCache.from_legacy_cache(cache)
+        cache.crop(n + len(accepted))
+        full = torch.cat([prompt, torch.tensor([accepted], device=self.device, dtype=torch.long)], 1) if accepted else prompt.clone()
+        self.model.init_input_ids = full.clone()
+        if int(boundary_token) == 8710:
+            return accepted + [8710]
+        generated = [int(boundary_token)]
+        for _ in range(self.max_new_tokens - len(accepted) - 1):
+            out = self.model(input_ids=torch.tensor([[generated[-1]]], device=self.device),
+                             past_key_values=cache, use_cache=True, return_dict=True)
+            cache = out.past_key_values
+            t = int(out.logits[0, -1].argmax())
             generated.append(t)
             if t == 8710:
                 break
-            out = self.model(input_ids=torch.tensor([[t]], device=self.device),
-                             past_key_values=cache, use_cache=True, return_dict=True)
-            cache, logits = out.past_key_values, out.logits[:, -1]
-        return accepted+generated
+        return accepted + generated
 
     @torch.inference_mode()
     def spec(self, prompt):
         if len(self.drafts) != 3:
             raise ValueError('Spec requires three independently loaded drafts')
         pre, feature = self.prefill(prompt)
-        first = pre.logits[:, -1].clone()
         self.trace = dict(branch_calls=[0, 0, 0], block_calls=0, gates=[],
             reference='candidate-prefix-conditioned frozen target; not independent AR oracle',
-            acceptance='absolute explicit-unit per-axis tolerance, atomic 7D')
+            acceptance='absolute explicit-unit per-axis tolerance, atomic 7D',
+            bf16_boundary_reuse=True)
         parts = []
         for i, draft in enumerate(self.drafts):
             parts.append(draft(feature[None]).argmax(-1)[0])
@@ -126,7 +127,9 @@ class Runtime:
         self.trace['accepted_steps'] = count
         if count == self.horizon and pred[-1] == 8710:
             return proposal, count
-        return self.recover_original(prompt, accepted, cache, first), count
+        boundary = pred[len(accepted)] if len(accepted) < len(pred) else 8710
+        self.trace['boundary_token'] = boundary
+        return self.recover_original(prompt, accepted, cache, boundary), count
 
 def steps(tokens):
     out, start = [], None

@@ -1,0 +1,39 @@
+% Main LIBERO table: 50 paired trials / suite (init 0-4 WorldVLA; init 10-14 RynnVLA).
+% Not paper-scale 500 episodes/suite. Wall cut = 1 - T_spec / T_native on paired episode wall time.
+\begin{table}[t]
+\centering
+\caption{LIBERO success rate (\%) and episode wall-time reduction. Speculative decoding uses three independent Transformer drafts, one causal block verification, and absolute action gates ($0.01\,\mathrm{m}$ / $0.05\,\mathrm{rad}$ / gripper sign). WorldVLA speculative arm uses fixed-horizon no-EOS grammar; RynnVLA uses the official discrete BF16 path with verifier boundary-token reuse.}
+\label{tab:main-libero}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llccccc}
+\toprule
+Model & Method & Spatial & Object & Goal & Long & Avg \\
+\midrule
+\multirow{2}{*}{WorldVLA}
+  & Native
+  & 86.0 & 80.0 & 68.0 & 44.0 & 69.5 \\
+  & Speculative
+  & 90.0 & 84.0 & 74.0 & 48.0 & 74.0 \\
+\midrule
+\multirow{2}{*}{RynnVLA-002}
+  & Native
+  & 90.0 & 94.0 & 100.0 & 94.0 & 94.5 \\
+  & Speculative
+  & 88.0 & 72.0 & 98.0 & 72.0 & 82.5 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\begin{tabular}{llccccc}
+\toprule
+Model & Metric & Spatial & Object & Goal & Long & Macro \\
+\midrule
+WorldVLA
+  & Wall-time cut (\%)
+  & 30.0 & 39.3 & 24.5 & 28.8 & 30.6 \\
+RynnVLA-002
+  & Wall-time cut (\%)
+  & 33.9 & 61.7 & 50.4 & 33.0 & 44.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
