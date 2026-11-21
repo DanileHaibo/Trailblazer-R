@@ -16,9 +16,9 @@
 - **WorldVLA**：Spatial / Object / Goal 预测最多 5 步，Long 最多 10 步，执行返回的整个有效 chunk；原生可提前 EOS。保留官方 previous/current **agentview-only** target prompt，不注入 wrist。FP32 target；rich draft 使用真实图像/语言 token pool 与 proprioception。
 - **RynnVLA-002**：Spatial / Long 预测并执行 10 步，Object / Goal 5 步。BF16 target，`highest`、TF32 off；`max_new_tokens=300`；历史图像每个环境步更新，而非每个 chunk 更新。拒绝后 **复用 verifier 边界 token** 并裁剪 KV 到已接受前缀，避免 BF16 下重新 forward 末 token 造成的近平局漂移。
 - 支持 `libero_spatial`、`libero_object`、`libero_goal`、`libero_10`（Long）。
-- 默认 gate：`configs/rynnvla.json`（1 cm / 0.05 rad）。更紧开发门槛：`--config configs/rynnvla_tight_5mm.json`（5 mm / 0.025 rad）。
+- **推荐 gate**（见 `configs/recommended.json`）：Spatial / Goal / Long 默认 **10 mm / 0.05 rad**；**Rynn Object 7 mm**（`configs/rynnvla_object_7mm.json`）；**World Object 5 mm**（`configs/worldvla_object_5mm.json`）。默认入口仍是 `configs/rynnvla.json` / `configs/worldvla.json`（10 mm）。
 
-仓库提供已训练 draft 与参数化**评测启动流程**。不包含基座、demonstrations、teacher 缓存，也不声称已提供从零重训全链路。原实验开发结果不等于新发布入口已完成 GPU 端到端复现；请先运行小样本。≥30% 加速与保分是实验目标，**不是所有 suite 已验证通过的保证**。
+仓库提供已训练 draft 与参数化**评测启动流程**。不包含基座、demonstrations、teacher 缓存，也不声称已提供从零重训全链路。原实验开发结果不等于新发布入口已完成 GPU 端到端复现；请先运行小样本。
 
 ## 1. 克隆与官方依赖
 
@@ -130,18 +130,24 @@ python -m rynnvla.evaluate \
 
 输出包括配置/权重哈希 manifest、逐 query 耗时/接受记录、episode 成功结果。延迟比较应报告完整 policy query，包括图像处理、prefill、draft、验证和 AR 回补；不能把 token 吞吐提升直接称为端到端加速。正式比较应先做 GPU warmup，并保持两臂精度、GPU负载与计时边界一致。
 
-## 5. 主实验结果（200 对 / 非论文 500/suite）
+## 5. 主实验结果（推荐 gate · 40 eps/suite）
 
-已冻结数字见 [`results/main_table_200pair.json`](results/main_table_200pair.json) 与可粘贴 LaTeX [`results/main_table.tex`](results/main_table.tex)。
+协议：tasks 0–3 × inits 0–9（每 suite 每臂 40 episodes）；加速为**双方均成功**的配对 policy 时间比。原始 JSON / LaTeX：[`results/libero_4suite_40ep.json`](results/libero_4suite_40ep.json)、[`results/libero_4suite_40ep.tex`](results/libero_4suite_40ep.tex)。配置索引：[`configs/recommended.json`](configs/recommended.json)。
 
-| Model | Method | Spatial | Object | Goal | Long | Avg | Wall cut (macro) |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| WorldVLA | Native | 86.0 | 80.0 | 68.0 | 44.0 | 69.5 | — |
-| WorldVLA | Spec | 90.0 | 84.0 | 74.0 | 48.0 | 74.0 | 30.6% |
-| RynnVLA-002 | Native | 90.0 | 94.0 | 100.0 | 94.0 | 94.5 | — |
-| RynnVLA-002 | Spec | 88.0 | 72.0 | 98.0 | 72.0 | 82.5 | 44.7% |
+| Model | Suite | Gate | Native | Trailblazer | Speedup |
+| --- | --- | ---: | ---: | ---: | ---: |
+| WorldVLA | Spatial | 10 mm | 38/40 | 38/40 | **1.79×** |
+| WorldVLA | Object | 5 mm | 31/40 | 30/40 | **1.15×** |
+| WorldVLA | Goal | 10 mm | 33/40 | 30/40 | **1.22×** |
+| WorldVLA | Long | 10 mm | 17/40 | 21/40 | **1.58×** |
+| WorldVLA | Avg | — | — | — | **1.44×** |
+| RynnVLA-002 | Spatial | 10 mm | 40/40 | 40/40 | **1.29×** |
+| RynnVLA-002 | Object | 7 mm | 36/40 | 35/40 | **1.28×** |
+| RynnVLA-002 | Goal | 10 mm | 40/40 | 38/40 | **1.44×** |
+| RynnVLA-002 | Long | 10 mm | 39/40 | 33/40 | **1.57×** |
+| RynnVLA-002 | Avg | — | — | — | **1.40×** |
 
-Rynn Object/Long 在 1 cm gate 下有明显掉分；收紧门槛的小样本重测不并入上表。
+标准 LIBERO 全量（tasks 0–9 × inits 0–49 = 500/suite）请用 `--tasks 0:10 --initials 0:50`（Rynn）或 `--tasks 0-9 --initials 0-49`（World）。
 
 ## 6. 发布检查
 
