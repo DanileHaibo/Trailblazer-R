@@ -26,11 +26,9 @@ def parser():
     p.add_argument('--checkpoint', type=Path, help='rich draft checkpoint; defaults to weights/worldvla/<suite>.pt')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--tasks', type=indices, default=indices('0-9'))
-    p.add_argument('--initials', type=indices, default=indices('0-4'))
+    p.add_argument('--initials', type=indices, default=indices('0-49'))
     p.add_argument('--mode', choices=('native', 'spec', 'both'), default='both')
     p.add_argument('--device', default='cuda:0')
-    p.add_argument('--xyz-threshold', type=float, default=.01, help='controller goal delta, metres')
-    p.add_argument('--rotation-threshold', type=float, default=.05, help='axis-angle controller goal delta component, radians')
     return p
 
 def append(path, row):
@@ -98,8 +96,8 @@ def main(argv=None):
     import torch
     from .runtime import Runtime
     from .rich import RichDraft
-    from .engine import AbsoluteGate, DEFAULT_GATE
-    gate_config = dict(DEFAULT_GATE, xyz_threshold=args.xyz_threshold, rotation_threshold=args.rotation_threshold)
+    from .engine import AbsoluteGate, gate_for_suite
+    gate_config = gate_for_suite(args.suite)
     gate = AbsoluteGate(gate_config)
     checkpoint = args.checkpoint or Path(__file__).resolve().parents[1]/'weights/worldvla'/f'{args.suite}.pt'
     rt = Runtime(args.suite, args.upstream_repo, args.model_root, args.model_path, args.device)

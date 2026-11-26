@@ -21,9 +21,9 @@ def main():
     args = parser().parse_args(['--base-path', 'BASE', '--official-repo', 'CODE',
         '--tokenizer-path', 'TEXT', '--image-tokenizer-path', 'VQ', '--output', 'OUTPUT'])
     plan = make_plan(args)
-    assert len(plan) == 200 and sum(len(p['order']) for p in plan) == 400
-    cfg = json.loads((root/'configs/rynnvla.json').read_text())
-    gate = AbsoluteGate(cfg['gate'])
+    assert len(plan) == 2000 and sum(len(p['order']) for p in plan) == 4000
+    from .gate import gate_config_for_suite
+    gate = AbsoluteGate(gate_config_for_suite('libero_spatial'))
     row = [10004]+[10133]*7+[15004]
     assert gate(row, row)[0]
     opposite = row.copy(); opposite[-2] = 10006
@@ -44,7 +44,7 @@ def main():
         assert out.shape == (1, ck['horizon'], ck['dims'], 256)
         results.append(dict(file=name, bytes=path.stat().st_size, shape=list(out.shape)))
     assert not torch.cuda.is_initialized()
-    print(json.dumps(dict(syntax=True, imports=True, default_pairs=200, default_episodes=400,
+    print(json.dumps(dict(syntax=True, imports=True, default_pairs=2000, default_episodes=4000,
                          gate_checks=True, checkpoints=results, cuda_initialized=False), indent=2))
 
 if __name__ == '__main__':

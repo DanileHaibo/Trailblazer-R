@@ -6,6 +6,45 @@ from pathlib import Path
 LOW = [-.9375, -.9375, -.9375, -.24214286, -.375, -.36428571, -1.]
 HIGH = [.9375, .9375, .9375, .34821429, .375, .375, 1.]
 
+# Best-release suite defaults in millimetres (rot = xyz_m * 5).
+SUITE_GATE_MM = {
+    'libero_spatial': 10,
+    'libero_object': 10,
+    'libero_goal': 10,
+    'libero_10': 7,
+}
+
+
+def gate_config_for_suite(suite):
+    xyz = SUITE_GATE_MM[suite] / 1000.0
+    rot = xyz * 5.0
+    return {
+        'xyz': {
+            'unit': 'm',
+            'absolute_tolerance': [xyz, xyz, xyz],
+            'verified_controller_mapping': {
+                'confirmed': True,
+                'source_evidence': 'rynnvla/controller_evidence.json',
+                'physical_per_command': [0.05, 0.05, 0.05],
+            },
+        },
+        'rot': {
+            'unit': 'rad',
+            'absolute_tolerance': [rot, rot, rot],
+            'verified_controller_mapping': {
+                'confirmed': True,
+                'source_evidence': 'rynnvla/controller_evidence.json',
+                'physical_per_command': [0.5, 0.5, 0.5],
+                'metric': 'axis_angle_component_delta',
+            },
+        },
+        'grip': {
+            'unit': 'command_units',
+            'mode': 'switch_sign_only',
+            'require_same_open_close': True,
+        },
+    }
+
 def decode_command(tokens):
     if len(tokens) != 7 or any(not 10006 <= int(t) <= 10261 for t in tokens):
         raise ValueError('Expected seven official native action tokens')

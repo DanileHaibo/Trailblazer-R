@@ -1,6 +1,6 @@
-"""Portable fair_v5/200-pair final_v7 evaluation, parameterized without training.
-Default plan: 4 suites x 10 tasks x initials 10..14 = 200 paired trials.
-Not the standard 500 trials per suite. No automatic retries or oracle calls.
+"""Closed-loop LIBERO evaluation for RynnVLA-002 (native / Trailblazer).
+
+Default plan: 4 suites x 10 tasks x 50 inits = 2000 paired trials.
 """
 import argparse
 import hashlib
@@ -37,10 +37,9 @@ def parser():
     ap.add_argument('--image-tokenizer-path', required=True, help='Official shared chameleon/tokenizer directory')
     ap.add_argument('--suite', nargs='+', choices=SUITES+['all'], default=['all'])
     ap.add_argument('--checkpoint', type=Path, default=RELEASE/'weights/rynnvla', help='Directory with suite_{xyz,rot,grip}_best.pt')
-    ap.add_argument('--config', type=Path, default=RELEASE/'configs/rynnvla.json')
     ap.add_argument('--output', type=Path, required=True, help='New output directory; refuses overwrite')
     ap.add_argument('--tasks', type=indices, default=indices('0:10'))
-    ap.add_argument('--initials', type=indices, default=indices('10:15'))
+    ap.add_argument('--initials', type=indices, default=indices('0:50'))
     ap.add_argument('--mode', nargs='+', choices=['native', 'spec'], default=['native', 'spec'])
     ap.add_argument('--device', default='cuda')
     ap.add_argument('--seed', type=int, default=20261104)
@@ -85,9 +84,9 @@ def main(argv=None):
     os.environ['TOKENIZERS_PARALLELISM'] = 'false'
     # No CUDA_VISIBLE_DEVICES override: caller controls GPU selection.
     args.output.mkdir(parents=True, exist_ok=False)
-    config = json.loads(args.config.read_text())
     save(args.output/'test_plan.json', plan)
     from .backend import configure, make_processor
+    from .gate import gate_config_for_suite
     configure(args.official_repo, args.libero_repo)
     import numpy as np
     import torch
@@ -115,20 +114,21 @@ def main(argv=None):
                 Image.fromarray(get_libero_image(obs, 256, 'robot0_eye_in_hand_image')),
                 np.concatenate([obs['robot0_eef_pos'], quat2axisangle(obs['robot0_eef_quat']), obs['robot0_gripper_qpos']]))
     seed()
+    suite_gates = {suite: gate_config_for_suite(suite) for suite in dict.fromkeys(p['suite'] for p in plan)}
     save(args.output/'freeze.json', dict(seed=args.seed, env_seed=0, pythonhash=os.environ['PYTHONHASHSEED'],
         precision=torch.get_float32_matmul_precision(), matmul_tf32=False, cudnn_tf32=False,
         cudnn_benchmark=False, cudnn_deterministic=True, deterministic_algorithms=True,
         deterministic_warn_only=True, cublas=os.environ['CUBLAS_WORKSPACE_CONFIG'], torch=torch.__version__,
         history_update='every environment step, not every chunk', warmup_excluded=True,
-        pairs=len(plan), episodes=sum(len(p['order']) for p in plan), not_standard500_per_suite=True,
+        pairs=len(plan), episodes=sum(len(p['order']) for p in plan),
         args={k:str(v) if isinstance(v, Path) else v for k,v in vars(args).items()}))
-    save(args.output/'gate_config.json', config['gate'])
+    save(args.output/'gate_config.json', suite_gates)
     processor = make_processor(args.tokenizer_path, args.image_tokenizer_path, args.device)
     allrows = []
     for suite in dict.fromkeys(p['suite'] for p in plan):
         seed()
         rt = Runtime(suite, base_path=args.base_path, processor=processor, checkpoint_dir=args.checkpoint,
-                     gate_config=config['gate'], mode='spec' if 'spec' in args.mode else 'native', device=args.device)
+                     gate_config=suite_gates[suite], mode='spec' if 'spec' in args.mode else 'native', device=args.device)
         benchmark_suite = benchmark.get_benchmark_dict()[suite]()
         component, phase, counts = {}, ['other'], {}
         for name in ['prefill', 'verify', 'recover_original', 'native']:

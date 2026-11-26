@@ -11,6 +11,19 @@ DEFAULT_GATE = dict(xyz_unit='m_goal_delta', rotation_unit='rad_axisangle_delta_
                     gripper_unit='binary_sign', xyz_threshold=.01, rotation_threshold=.05,
                     controller_scale_xyz=.05, controller_scale_rotation=.5, control_delta=True)
 
+# Best-release suite defaults (metres / radians). Callers should not expose these knobs.
+SUITE_GATE = {
+    'libero_spatial': (0.01, 0.05),
+    'libero_object': (0.01, 0.05),
+    'libero_goal': (0.01, 0.05),
+    'libero_10': (0.007, 0.035),
+}
+
+
+def gate_for_suite(suite):
+    xyz, rot = SUITE_GATE[suite]
+    return dict(DEFAULT_GATE, xyz_threshold=xyz, rotation_threshold=rot)
+
 class AbsoluteGate:
     def __init__(self, config):
         self.config = dict(config)
