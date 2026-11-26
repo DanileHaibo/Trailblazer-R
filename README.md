@@ -11,13 +11,13 @@ LIBERO 四套任务，每套 **500** episodes（10 tasks × 50 inits）。
 | WorldVLA | Spatial | 83.6% | 82.6% | **1.87×** |
 | WorldVLA | Object | 80.6% | 83.4% | **1.29×** |
 | WorldVLA | Goal | 80.4% | 80.2% | **1.46×** |
-| WorldVLA | Long | 55.2% | 54.7% | **1.63×** |
-| WorldVLA | **Avg** | **75.0%** | **75.2%** | **1.56×** |
+| WorldVLA | Long | 51.6% | 50.4% | **1.71×** |
+| WorldVLA | **Avg** | **74.1%** | **74.2%** | **1.58×** |
 | RynnVLA-002 | Spatial | 95.8% | 94.4% | **1.37×** |
 | RynnVLA-002 | Object | 93.8% | 92.2% | **1.37×** |
 | RynnVLA-002 | Goal | 95.6% | 93.0% | **1.56×** |
-| RynnVLA-002 | Long | 87.1% | 85.4% | **1.34×** |
-| RynnVLA-002 | **Avg** | **93.1%** | **91.3%** | **1.41×** |
+| RynnVLA-002 | Long | 86.0% | 84.6% | **1.34×** |
+| RynnVLA-002 | **Avg** | **92.8%** | **91.1%** | **1.41×** |
 
 原始 JSON：[`results/libero_4suite_500.json`](results/libero_4suite_500.json)。旧 π₀-FAST / NORA 实现见 [archive/pi0-nora-20261106](https://github.com/DanileHaibo/Trailblazer-R/tree/archive/pi0-nora-20261106)。
 

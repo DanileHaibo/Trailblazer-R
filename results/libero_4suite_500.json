@@ -20,15 +20,15 @@
       "speedup": 1.46
     },
     "libero_10": {
-      "n": 362,
-      "native": 55.2,
-      "trailblazer": 54.7,
-      "speedup": 1.63
+      "n": 500,
+      "native": 51.6,
+      "trailblazer": 50.4,
+      "speedup": 1.71
     },
     "avg": {
-      "native": 75.0,
-      "trailblazer": 75.2,
-      "speedup": 1.56
+      "native": 74.1,
+      "trailblazer": 74.2,
+      "speedup": 1.58
     }
   },
   "rynn": {
@@ -51,14 +51,14 @@
       "speedup": 1.56
     },
     "libero_10": {
-      "n": 419,
-      "native": 87.1,
-      "trailblazer": 85.4,
+      "n": 500,
+      "native": 86.0,
+      "trailblazer": 84.6,
       "speedup": 1.34
     },
     "avg": {
-      "native": 93.1,
-      "trailblazer": 91.3,
+      "native": 92.8,
+      "trailblazer": 91.1,
       "speedup": 1.41
     }
   }
